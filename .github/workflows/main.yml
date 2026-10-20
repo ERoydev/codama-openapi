@@ -1,0 +1,112 @@
+name: Main
+
+on:
+  push:
+    branches: [main, '[0-9]+.x']
+  pull_request:
+    branches: [main, '[0-9]+.x']
+
+concurrency:
+  group: main-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  # Among other things, opts out of Turborepo telemetry. See https://consoledonottrack.com/.
+  DO_NOT_TRACK: '1'
+  NODE_VERSION: 24
+
+jobs:
+  lint:
+    name: Check styling
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Compile JS and types
+        run: pnpm build
+
+      - name: Check linting
+        run: pnpm lint
+
+  tests:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build and run tests
+        run: pnpm build && pnpm test
+
+      - name: Ensure working directory is clean
+        run: |
+          git status
+          test -z "$(git status --porcelain)"
+
+  release:
+    name: Release
+    needs: [lint, tests]
+    if: github.event_name == 'push'
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+    uses: codama-idl/release-tools/.github/workflows/release.yml@v1
+    with:
+      release-version: 1.x
+    secrets: inherit
+
+  dependabot:
+    name: Dependabot
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'codama-idl/renderers-demo'
+    needs: [lint, tests]
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Fetch Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v3
+
+      - name: Auto-approve the PR
+        if: steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor'
+        run: gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Enable auto-merge
+        if: steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor'
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
