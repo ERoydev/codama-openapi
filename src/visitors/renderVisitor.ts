@@ -5,7 +5,7 @@ import { rootNodeVisitor } from '@codama/visitors-core';
 import { stringify } from 'yaml';
 
 import { buildOpenApi } from '../buildOpenApiDocument';
-import { RenderOptions, writeFiles } from '../utils';
+import { cleanOutDir, RenderOptions, writeFiles } from '../utils';
 
 /**
  * Codama entry point: builds the OpenAPI spec from the IDL
@@ -16,6 +16,7 @@ export function renderVisitor(path: string, options: RenderOptions = {}) {
     return rootNodeVisitor(root => {
         const { spec, pathFiles, schemaFiles } = buildOpenApi(root, options);
         const outDir = dirname(path);
+        cleanOutDir(outDir);
 
         write(path, spec); // writes main openapi.yaml spec
         writeFiles(outDir, pathFiles);

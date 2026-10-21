@@ -1,10 +1,10 @@
 import type { InstructionAccountNode, InstructionNode } from '@codama/nodes';
 import { visit } from '@codama/visitors-core';
 
+import { RESOLVED_BY_BACKEND } from '../constants';
 import type { PathsObject, SchemaObject } from '../types';
 import { pascal } from '../utils';
 import { getSchemaVisitor } from '../visitors';
-import { RESOLVED_BY_BACKEND } from '../constants';
 
 export type InstructionFragment = {
     paths: PathsObject;
@@ -24,7 +24,7 @@ export const isFromRequest = (acc: InstructionAccountNode): boolean => {
         `Account "${acc.name}" has unhandled default value "${acc.defaultValue.kind}". ` +
             `Add it to RESOLVED_BY_BACKEND or handle it explicitly.`,
     );
-}
+};
 
 /**
  * For each instruction:
