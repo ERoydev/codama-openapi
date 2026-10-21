@@ -20,9 +20,6 @@ importers:
       '@codama/visitors-core':
         specifier: ^1.10.0
         version: 1.11.0
-      '@solana/codecs':
-        specifier: ^8.0.0
-        version: 8.5.0(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)
       yaml:
         specifier: ^2.9.1
         version: 2.9.1
