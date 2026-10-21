@@ -1,11 +1,8 @@
-import { Extensions } from "./document";
+import { Extensions } from './document';
 
 // Security
 export type SecuritySchemeObject =
-    | ApiKeySecurityScheme
-    | HttpSecurityScheme
-    | OAuth2SecurityScheme
-    | OpenIdConnectSecurityScheme;
+    ApiKeySecurityScheme | HttpSecurityScheme | OAuth2SecurityScheme | OpenIdConnectSecurityScheme;
 
 type SecuritySchemeBase = Extensions & {
     description?: string;

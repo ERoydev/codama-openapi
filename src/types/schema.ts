@@ -1,7 +1,7 @@
-import { Extensions, Ref } from "./document";
-import { ExternalDocumentationObject } from "./paths";
+import { Extensions, Ref } from './document';
+import { ExternalDocumentationObject } from './paths';
 
-// Schema 
+// Schema
 export type SchemaType = 'array' | 'boolean' | 'integer' | 'number' | 'object' | 'string';
 
 export type SchemaObject = Extensions & {
@@ -23,34 +23,34 @@ export type SchemaObject = Extensions & {
     items?: Ref<SchemaObject>;
 
     maxItems?: number;
-    oneOf?: Ref<SchemaObject>[];
+    // Strings
+    maxLength?: number;
     maxProperties?: number;
     maximum?: number;
 
     minItems?: number;
-    not?: Ref<SchemaObject>;
+    minLength?: number;
     minProperties?: number;
     minimum?: number;
-    writeOnly?: boolean;
-
-    // Strings
-    maxLength?: number;
-    nullable?: boolean;
-    pattern?: string;
-
-    minLength?: number;
-    // Objects
-    properties?: Record<string, Ref<SchemaObject>>;
     // Numbers
     multipleOf?: number;
+
+    not?: Ref<SchemaObject>;
+    nullable?: boolean;
+    oneOf?: Ref<SchemaObject>[];
+
+    pattern?: string;
+    // Objects
+    properties?: Record<string, Ref<SchemaObject>>;
+    readOnly?: boolean;
     required?: string[];
 
     title?: string;
     // Core
     type?: SchemaType;
     uniqueItems?: boolean;
+    writeOnly?: boolean;
     xml?: XmlObject;
-    readOnly?: boolean;
 };
 
 export type DiscriminatorObject = {

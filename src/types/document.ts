@@ -1,9 +1,16 @@
+// Specification Extensions
 
-// Specification Extensions 
-
-import { ExternalDocumentationObject, HeaderObject, ParameterObject, PathItemObject, PathsObject, RequestBodyObject, ResponseObject } from "./paths";
-import { SchemaObject } from "./schema";
-import { SecurityRequirementObject, SecuritySchemeObject } from "./security";
+import {
+    ExternalDocumentationObject,
+    HeaderObject,
+    ParameterObject,
+    PathItemObject,
+    PathsObject,
+    RequestBodyObject,
+    ResponseObject,
+} from './paths';
+import { SchemaObject } from './schema';
+import { SecurityRequirementObject, SecuritySchemeObject } from './security';
 
 // Any object may carry extra fields whose names start with "x-".
 export type Extensions = {
@@ -20,8 +27,7 @@ export type Ref<T> = ReferenceObject | T;
 export const isReference = (value: unknown): value is ReferenceObject =>
     typeof value === 'object' && value !== null && '$ref' in value;
 
-
-// Components 
+// Components
 export type ComponentsObject = Extensions & {
     callbacks?: Record<string, Ref<CallbackObject>>;
     examples?: Record<string, Ref<ExampleObject>>;
@@ -36,7 +42,7 @@ export type ComponentsObject = Extensions & {
 
 // Callbacks
 export type CallbackObject = Extensions & {
-    [expression: string]: PathItemObject | unknown;
+    [expression: string]: PathItemObject;
 };
 
 export type ExampleObject = Extensions & {

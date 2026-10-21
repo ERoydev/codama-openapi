@@ -1,8 +1,8 @@
-import { CallbackObject, ExampleObject, Extensions, LinkObject, Ref, ServerObject } from "./document";
-import { SchemaObject } from "./schema";
-import { SecurityRequirementObject } from "./security";
+import { CallbackObject, ExampleObject, Extensions, LinkObject, Ref, ServerObject } from './document';
+import { SchemaObject } from './schema';
+import { SecurityRequirementObject } from './security';
 
-// Paths 
+// Paths
 export type PathsObject = Extensions & {
     [path: `/${string}`]: PathItemObject;
 };
@@ -46,11 +46,10 @@ export type ExternalDocumentationObject = Extensions & {
     url: string;
 };
 
-// Parameters & Headers 
+// Parameters & Headers
 export type ParameterLocation = 'cookie' | 'header' | 'path' | 'query';
 
-export type ParameterStyle =
-    'deepObject' | 'form' | 'label' | 'matrix' | 'pipeDelimited' | 'simple' | 'spaceDelimited';
+export type ParameterStyle = 'deepObject' | 'form' | 'label' | 'matrix' | 'pipeDelimited' | 'simple' | 'spaceDelimited';
 
 // Fields shared by Parameter and Header objects
 type ParameterBase = Extensions & {
@@ -75,7 +74,7 @@ export type ParameterObject = ParameterBase & {
 // A Header is a Parameter without "name" and "in"
 export type HeaderObject = ParameterBase;
 
-// Request Body & Media Types 
+// Request Body & Media Types
 export type RequestBodyObject = Extensions & {
     content: Record<string, MediaTypeObject>;
     description?: string;
@@ -97,10 +96,10 @@ export type EncodingObject = Extensions & {
     style?: ParameterStyle;
 };
 
-// Responses 
+// Responses
 // Keys are "default" or an HTTP status code / range such as "200" or "4XX"
 export type ResponsesObject = Extensions & {
-    [status: string]: Ref<ResponseObject> | unknown;
+    [status: string]: Ref<ResponseObject>;
 };
 
 export type ResponseObject = Extensions & {
