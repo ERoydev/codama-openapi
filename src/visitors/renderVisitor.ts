@@ -1,28 +1,30 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
-import { dirname } from 'node:path';
+import { dirname, join } from 'node:path';
 import { rootNodeVisitor } from '@codama/visitors-core';
 import { stringify } from 'yaml';
 
-import { RenderOptions } from '../utils/options';
-import { buildOpenApi } from './buildOpenApi';
+import { buildOpenApi } from '../buildOpenApiDocument';
+import { RenderOptions } from '../utils';
 
+/**
+ * Codama entry point: builds the OpenAPI spec from the IDL
+ * and writes it to `path` (e.g. "api/openapi.yaml"),
+ * with each path in its own file next to it (e.g. "api/paths/...").
+ */
 export function renderVisitor(path: string, options: RenderOptions = {}) {
     return rootNodeVisitor(root => {
-        const spec = buildOpenApi(root, options);
-        mkdirSync(dirname(path), { recursive: true });
-        writeFileSync(path, stringify(spec));
+        const { spec, pathFiles } = buildOpenApi(root, options);
+        const outDir = dirname(path);
+
+        write(path, spec);
+
+        for (const [file, content] of Object.entries(pathFiles)) {
+            write(join(outDir, file), content);
+        }
     });
 }
 
-// export function renderVisitor(path: string, options: RenderOptions = {}) {
-//     return rootNodeVisitor(root => {
-//         // Delete existing generated folder.
-//         if (options.deleteFolderBeforeRendering ?? true) {
-//             deleteDirectory(path);
-//         }
-
-//         // Render the new files.
-//         const renderMap = visit(root, getRenderMapVisitor(options));
-//         writeRenderMap(renderMap, path);
-//     });
-// }
+function write(target: string, content: unknown) {
+    mkdirSync(dirname(target), { recursive: true });
+    writeFileSync(target, stringify(content, { aliasDuplicateObjects: false }));
+}
