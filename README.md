@@ -1,31 +1,22 @@
-# Codama ➤ Renderers ➤ Demo
+# Codama OpenAPI Renderer
 
-[![npm][npm-image]][npm-url]
-[![npm-downloads][npm-downloads-image]][npm-url]
-
-[npm-downloads-image]: https://img.shields.io/npm/dm/@codama/renderers-demo.svg?style=flat
-[npm-image]: https://img.shields.io/npm/v/@codama/renderers-demo.svg?style=flat&label=%40codama%2Frenderers-demo
-[npm-url]: https://www.npmjs.com/package/@codama/renderers-demo
-
-This package provides a demo implementation of a Codama renderer to help developers create their own.
-
-## Installation
-
-```sh
-pnpm install @codama/renderers-demo
-```
+A [Codama](https://github.com/codama-idl/codama) renderer that turns a Solana program IDL into an OpenAPI 3.0.3 spec.
 
 ## Usage
 
-Add the following script to your Codama configuration file.
+```sh
+pnpm tsx scripts/run.ts path/to/idl.json
+```
 
-```json
-{
-    "scripts": {
-        "demo": {
-            "from": "@codama/renderers-demo",
-            "args": ["docs"]
-        }
-    }
-}
+```sh
+npx @redocly/cli lint out/openapi.yaml
+```
+
+This generates `out/openapi.yaml`, with each path split into its own file under `out/paths/`.
+
+## Development
+
+```sh
+pnpm install
+pnpm build
 ```
