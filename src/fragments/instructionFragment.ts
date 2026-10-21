@@ -68,6 +68,8 @@ export function getInstructionFragment(
         fragment.paths[`/${programName}/${ix.name}`] = {
             post: {
                 operationId: ix.name,
+                summary: ix.docs?.length ? ix.docs.join(' ') : `Execute ${ix.name} instruction`,
+                tags: [programName],
                 requestBody: {
                     content: { 'application/json': { schema: { $ref: `#/components/schemas/${requestName}` } } },
                     required: true,
@@ -76,8 +78,6 @@ export function getInstructionFragment(
                     '200': { description: 'Transaction sent' },
                     '400': { description: 'Transaction failed' },
                 },
-                summary: ix.docs?.length ? ix.docs.join(' ') : `Execute ${ix.name} instruction`,
-                tags: [programName],
             },
         };
     }

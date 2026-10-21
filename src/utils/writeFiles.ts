@@ -6,7 +6,11 @@ import { stringify } from 'yaml';
 export function writeFiles(outDir: string, files: Record<string, unknown>) {
     for (const [file, content] of Object.entries(files)) {
         const target = join(outDir, file);
-        mkdirSync(dirname(target), { recursive: true });
-        writeFileSync(target, stringify(content, { aliasDuplicateObjects: false }));
+        write(target, content);
     }
+}
+
+function write(target: string, content: unknown) {
+    mkdirSync(dirname(target), { recursive: true });
+    writeFileSync(target, stringify(content, { aliasDuplicateObjects: false }));
 }

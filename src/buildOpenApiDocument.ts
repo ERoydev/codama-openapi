@@ -19,11 +19,14 @@ export function buildOpenApi(root: RootNode, options: RenderOptions = {}) {
     const { refs: schemas, files: schemaFiles } = YamlFileSeparator(allSchemas, 'schemas');
 
     const spec: OpenAPIObject = {
-        info: { title: program.name, version: program.version ?? '0.0.0' },
         openapi: OPENAPI_VERSION,
+        info: {
+            title: program.name,
+            version: program.version ?? '0.0.0',
+        },
         ...(options.serverUrl ? { servers: [{ url: options.serverUrl }] } : {}),
-        components: { schemas },
         paths,
+        components: { schemas },
     };
 
     return { pathFiles, schemaFiles, spec };

@@ -29,7 +29,9 @@ export function getAccountFragment(programName: string, accounts: readonly Accou
         fragment.paths[`/${programName}/${account.name}/{address}`] = {
             get: {
                 operationId: `get${name}`,
-
+                // account.docs comes from /// comments on the account struct (empty if none)
+                summary: account.docs?.length ? account.docs.join(' ') : `Fetch a ${account.name} account`,
+                tags: [programName],
                 parameters: [
                     {
                         description: 'base58 account address',
@@ -39,7 +41,6 @@ export function getAccountFragment(programName: string, accounts: readonly Accou
                         schema: { type: 'string' },
                     },
                 ],
-
                 responses: {
                     '200': {
                         content: { 'application/json': { schema: { $ref: `#/components/schemas/${name}` } } },
@@ -47,9 +48,6 @@ export function getAccountFragment(programName: string, accounts: readonly Accou
                     },
                     '404': { description: 'Account not found' },
                 },
-                // on Anchor IDL's, account.docs is never populated
-                summary: account.docs?.length ? account.docs.join(' ') : `Fetch a ${account.name} account`,
-                tags: [programName],
             },
         };
     }
