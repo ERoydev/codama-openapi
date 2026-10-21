@@ -4,23 +4,27 @@ import { visit } from '@codama/visitors-core';
 import type { PathsObject, SchemaObject } from '../types';
 import { pascal } from '../utils';
 import { getSchemaVisitor } from '../visitors';
+import { RESOLVED_BY_BACKEND } from '../constants';
 
 export type InstructionFragment = {
     paths: PathsObject;
     schemas: Record<string, SchemaObject>;
 };
 
-// Accounts the backend fills in itself, so they're not in the request
-const RESOLVED_BY_BACKEND = [
-    'pdaValueNode', // derived from seeds
-    'publicKeyValueNode', // fixed address (e.g. system program)
-    'programIdValueNode',
-    'payerValueNode',
-    'identityValueNode',
-];
+// returns false if the account has one of the default values, so the account is going to be left out out of the request
+// const isFromRequest = (acc: InstructionAccountNode) =>
+// !(acc.defaultValue && RESOLVED_BY_BACKEND.includes(acc.defaultValue.kind));
+export const isFromRequest = (acc: InstructionAccountNode): boolean => {
+    // No default value, backend can't know it, caller needs to send it
+    if (!acc.defaultValue) return true;
 
-const isFromRequest = (acc: InstructionAccountNode) =>
-    acc.isSigner !== true && !(acc.defaultValue && RESOLVED_BY_BACKEND.includes(acc.defaultValue.kind));
+    if (RESOLVED_BY_BACKEND.includes(acc.defaultValue.kind)) return false;
+
+    throw new Error(
+        `Account "${acc.name}" has unhandled default value "${acc.defaultValue.kind}". ` +
+            `Add it to RESOLVED_BY_BACKEND or handle it explicitly.`,
+    );
+}
 
 /**
  * For each instruction:
@@ -39,7 +43,8 @@ export function getInstructionFragment(
         const properties: Record<string, SchemaObject> = {};
         const required: string[] = [];
 
-        // Arguments (skip the Anchor discriminator)
+        // discriminator is the first arg for each ix
+        // TODO test with IDLs that has ugly arguments
         for (const arg of ix.arguments ?? []) {
             if (arg.defaultValueStrategy === 'omitted') continue;
             properties[arg.name] = visit(arg.type, visitor);
