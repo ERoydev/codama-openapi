@@ -6,8 +6,8 @@ import { pascal } from '../utils';
 import { getSchemaVisitor } from '../visitors';
 
 export type AccountFragment = {
-    schemas: Record<string, SchemaObject>;
     paths: PathsObject;
+    schemas: Record<string, SchemaObject>;
 };
 
 /**
@@ -17,7 +17,7 @@ export type AccountFragment = {
  */
 export function getAccountFragment(programName: string, accounts: readonly AccountNode[] = []): AccountFragment {
     const visitor = getSchemaVisitor();
-    const fragment: AccountFragment = { schemas: {}, paths: {} };
+    const fragment: AccountFragment = { paths: {}, schemas: {} };
 
     for (const account of [...accounts].sort((a, b) => a.name.localeCompare(b.name))) {
         const name = pascal(account.name);
@@ -29,24 +29,27 @@ export function getAccountFragment(programName: string, accounts: readonly Accou
         fragment.paths[`/${programName}/${account.name}/{address}`] = {
             get: {
                 operationId: `get${name}`,
-                summary: account.docs?.length ? account.docs.join(' ') : `Fetch a ${account.name} account`,
-                tags: [programName],
+
                 parameters: [
                     {
-                        name: 'address',
-                        in: 'path',
-                        required: true,
                         description: 'base58 account address',
+                        in: 'path',
+                        name: 'address',
+                        required: true,
                         schema: { type: 'string' },
                     },
                 ],
+
                 responses: {
                     '200': {
-                        description: 'Decoded account data',
                         content: { 'application/json': { schema: { $ref: `#/components/schemas/${name}` } } },
+                        description: 'Decoded account data',
                     },
                     '404': { description: 'Account not found' },
                 },
+                // on Anchor IDL's, account.docs is never populated
+                summary: account.docs?.length ? account.docs.join(' ') : `Fetch a ${account.name} account`,
+                tags: [programName],
             },
         };
     }

@@ -6,14 +6,14 @@ import { pascal } from '../utils';
 import { getSchemaVisitor } from '../visitors';
 
 export type InstructionFragment = {
-    schemas: Record<string, SchemaObject>;
     paths: PathsObject;
+    schemas: Record<string, SchemaObject>;
 };
 
 // Accounts the backend fills in itself, so they're not in the request
 const RESOLVED_BY_BACKEND = [
-    'pdaValueNode',        // derived from seeds
-    'publicKeyValueNode',  // fixed address (e.g. system program)
+    'pdaValueNode', // derived from seeds
+    'publicKeyValueNode', // fixed address (e.g. system program)
     'programIdValueNode',
     'payerValueNode',
     'identityValueNode',
@@ -27,9 +27,12 @@ const isFromRequest = (acc: InstructionAccountNode) =>
  * - schema: <Name>Request, from its args + accounts the caller must send
  * - path:   POST /<program>/<instruction>
  */
-export function getInstructionFragment(programName: string, instructions: readonly InstructionNode[] = []): InstructionFragment {
+export function getInstructionFragment(
+    programName: string,
+    instructions: readonly InstructionNode[] = [],
+): InstructionFragment {
     const visitor = getSchemaVisitor();
-    const fragment: InstructionFragment = { schemas: {}, paths: {} };
+    const fragment: InstructionFragment = { paths: {}, schemas: {} };
 
     for (const ix of [...instructions].sort((a, b) => a.name.localeCompare(b.name))) {
         const requestName = `${pascal(ix.name)}Request`;
@@ -45,14 +48,14 @@ export function getInstructionFragment(programName: string, instructions: readon
 
         // Accounts the caller has to send
         for (const acc of (ix.accounts ?? []).filter(isFromRequest)) {
-            properties[acc.name] = { type: 'string', description: 'base58 account address' };
+            properties[acc.name] = { description: 'base58 account address', type: 'string' };
             if (!acc.isOptional) required.push(acc.name);
         }
 
         // Schema
         fragment.schemas[requestName] = {
-            type: 'object',
             properties,
+            type: 'object',
             ...(required.length ? { required } : {}),
         };
 
@@ -60,16 +63,16 @@ export function getInstructionFragment(programName: string, instructions: readon
         fragment.paths[`/${programName}/${ix.name}`] = {
             post: {
                 operationId: ix.name,
-                summary: ix.docs?.length ? ix.docs.join(' ') : `Execute ${ix.name} instruction`,
-                tags: [programName],
                 requestBody: {
-                    required: true,
                     content: { 'application/json': { schema: { $ref: `#/components/schemas/${requestName}` } } },
+                    required: true,
                 },
                 responses: {
                     '200': { description: 'Transaction sent' },
                     '400': { description: 'Transaction failed' },
                 },
+                summary: ix.docs?.length ? ix.docs.join(' ') : `Execute ${ix.name} instruction`,
+                tags: [programName],
             },
         };
     }

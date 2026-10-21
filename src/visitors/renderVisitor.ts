@@ -1,10 +1,11 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname } from 'node:path';
+
 import { rootNodeVisitor } from '@codama/visitors-core';
 import { stringify } from 'yaml';
 
 import { buildOpenApi } from '../buildOpenApiDocument';
-import { RenderOptions } from '../utils';
+import { RenderOptions, writeFiles } from '../utils';
 
 /**
  * Codama entry point: builds the OpenAPI spec from the IDL
@@ -13,14 +14,12 @@ import { RenderOptions } from '../utils';
  */
 export function renderVisitor(path: string, options: RenderOptions = {}) {
     return rootNodeVisitor(root => {
-        const { spec, pathFiles } = buildOpenApi(root, options);
+        const { spec, pathFiles, schemaFiles } = buildOpenApi(root, options);
         const outDir = dirname(path);
 
-        write(path, spec);
-
-        for (const [file, content] of Object.entries(pathFiles)) {
-            write(join(outDir, file), content);
-        }
+        write(path, spec); // writes main openapi.yaml spec
+        writeFiles(outDir, pathFiles);
+        writeFiles(outDir, schemaFiles);
     });
 }
 
