@@ -9,6 +9,6 @@
         "test": "../../../node_modules/.bin/codama run demo"
     },
     "devDependencies": {
-        "@codama/renderers-demo": "file:../../.."
+        "codama-renderer-openapi": "file:../../.."
     }
 }

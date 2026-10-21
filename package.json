@@ -1,5 +1,5 @@
 {
-    "name": "@codama/renderers-demo",
+    "name": "codama-renderer-openapi",
     "version": "1.0.7",
     "description": "Demo renderer to help creating new ones",
     "exports": {

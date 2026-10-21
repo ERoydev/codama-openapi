@@ -18,7 +18,7 @@
         "strict": true,
         "target": "ESNext"
     },
-    "display": "@codama/renderers-demo",
+    "display": "codama-renderer-openapi",
     "include": ["src", "test", "tsup.config.ts"],
     "exclude": ["node_modules"]
 }
