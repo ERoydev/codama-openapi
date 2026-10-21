@@ -12,39 +12,39 @@ type SecuritySchemeBase = Extensions & {
 };
 
 export type ApiKeySecurityScheme = SecuritySchemeBase & {
-    type: 'apiKey';
+    in: 'cookie' | 'header' | 'query';
     name: string;
-    in: 'query' | 'header' | 'cookie';
+    type: 'apiKey';
 };
 
 export type HttpSecurityScheme = SecuritySchemeBase & {
-    type: 'http';
-    scheme: string;
     bearerFormat?: string;
+    scheme: string;
+    type: 'http';
 };
 
 export type OAuth2SecurityScheme = SecuritySchemeBase & {
-    type: 'oauth2';
     flows: OAuthFlowsObject;
+    type: 'oauth2';
 };
 
 export type OpenIdConnectSecurityScheme = SecuritySchemeBase & {
-    type: 'openIdConnect';
     openIdConnectUrl: string;
+    type: 'openIdConnect';
 };
 
 export type OAuthFlowsObject = Extensions & {
+    authorizationCode?: OAuthFlowObject;
+    clientCredentials?: OAuthFlowObject;
     implicit?: OAuthFlowObject;
     password?: OAuthFlowObject;
-    clientCredentials?: OAuthFlowObject;
-    authorizationCode?: OAuthFlowObject;
 };
 
 export type OAuthFlowObject = Extensions & {
     authorizationUrl?: string;
-    tokenUrl?: string;
     refreshUrl?: string;
     scopes: Record<string, string>;
+    tokenUrl?: string;
 };
 
 // Keys are security scheme names, values are required scopes

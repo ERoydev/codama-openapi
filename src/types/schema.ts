@@ -2,66 +2,66 @@ import { Extensions, Ref } from "./document";
 import { ExternalDocumentationObject } from "./paths";
 
 // Schema 
-export type SchemaType = 'string' | 'number' | 'integer' | 'boolean' | 'array' | 'object';
+export type SchemaType = 'array' | 'boolean' | 'integer' | 'number' | 'object' | 'string';
 
 export type SchemaObject = Extensions & {
-    // Core
-    type?: SchemaType;
-    format?: string;
-    title?: string;
-    description?: string;
-    default?: unknown;
-    enum?: unknown[];
-    nullable?: boolean;
-    readOnly?: boolean;
-    writeOnly?: boolean;
-    deprecated?: boolean;
-    example?: unknown;
-    externalDocs?: ExternalDocumentationObject;
-    xml?: XmlObject;
-    discriminator?: DiscriminatorObject;
-
+    additionalProperties?: Ref<SchemaObject> | boolean;
     // Composition
     allOf?: Ref<SchemaObject>[];
-    oneOf?: Ref<SchemaObject>[];
     anyOf?: Ref<SchemaObject>[];
-    not?: Ref<SchemaObject>;
-
-    // Numbers
-    multipleOf?: number;
-    maximum?: number;
+    default?: unknown;
+    deprecated?: boolean;
+    description?: string;
+    discriminator?: DiscriminatorObject;
+    enum?: unknown[];
+    example?: unknown;
     exclusiveMaximum?: boolean;
-    minimum?: number;
     exclusiveMinimum?: boolean;
+    externalDocs?: ExternalDocumentationObject;
+    format?: string;
+    // Arrays
+    items?: Ref<SchemaObject>;
+
+    maxItems?: number;
+    oneOf?: Ref<SchemaObject>[];
+    maxProperties?: number;
+    maximum?: number;
+
+    minItems?: number;
+    not?: Ref<SchemaObject>;
+    minProperties?: number;
+    minimum?: number;
+    writeOnly?: boolean;
 
     // Strings
     maxLength?: number;
-    minLength?: number;
+    nullable?: boolean;
     pattern?: string;
 
-    // Arrays
-    items?: Ref<SchemaObject>;
-    maxItems?: number;
-    minItems?: number;
-    uniqueItems?: boolean;
-
+    minLength?: number;
     // Objects
     properties?: Record<string, Ref<SchemaObject>>;
-    additionalProperties?: boolean | Ref<SchemaObject>;
+    // Numbers
+    multipleOf?: number;
     required?: string[];
-    maxProperties?: number;
-    minProperties?: number;
+
+    title?: string;
+    // Core
+    type?: SchemaType;
+    uniqueItems?: boolean;
+    xml?: XmlObject;
+    readOnly?: boolean;
 };
 
 export type DiscriminatorObject = {
-    propertyName: string;
     mapping?: Record<string, string>;
+    propertyName: string;
 };
 
 export type XmlObject = Extensions & {
+    attribute?: boolean;
     name?: string;
     namespace?: string;
     prefix?: string;
-    attribute?: boolean;
     wrapped?: boolean;
 };

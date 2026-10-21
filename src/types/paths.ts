@@ -7,38 +7,38 @@ export type PathsObject = Extensions & {
     [path: `/${string}`]: PathItemObject;
 };
 
-export type HttpMethod = 'get' | 'put' | 'post' | 'delete' | 'options' | 'head' | 'patch' | 'trace';
+export type HttpMethod = 'delete' | 'get' | 'head' | 'options' | 'patch' | 'post' | 'put' | 'trace';
 
 export type PathItemObject = Extensions & {
     $ref?: string;
-    summary?: string;
+    delete?: OperationObject;
     description?: string;
     get?: OperationObject;
-    put?: OperationObject;
-    post?: OperationObject;
-    delete?: OperationObject;
-    options?: OperationObject;
     head?: OperationObject;
-    patch?: OperationObject;
-    trace?: OperationObject;
-    servers?: ServerObject[];
+    options?: OperationObject;
     parameters?: Ref<ParameterObject>[];
+    patch?: OperationObject;
+    post?: OperationObject;
+    put?: OperationObject;
+    servers?: ServerObject[];
+    summary?: string;
+    trace?: OperationObject;
 };
 
 // Operation
 export type OperationObject = Extensions & {
-    tags?: string[];
-    summary?: string;
+    callbacks?: Record<string, Ref<CallbackObject>>;
+    deprecated?: boolean;
     description?: string;
     externalDocs?: ExternalDocumentationObject;
     operationId?: string;
     parameters?: Ref<ParameterObject>[];
     requestBody?: Ref<RequestBodyObject>;
     responses: ResponsesObject;
-    callbacks?: Record<string, Ref<CallbackObject>>;
-    deprecated?: boolean;
     security?: SecurityRequirementObject[];
     servers?: ServerObject[];
+    summary?: string;
+    tags?: string[];
 };
 
 export type ExternalDocumentationObject = Extensions & {
@@ -47,35 +47,29 @@ export type ExternalDocumentationObject = Extensions & {
 };
 
 // Parameters & Headers 
-export type ParameterLocation = 'query' | 'header' | 'path' | 'cookie';
+export type ParameterLocation = 'cookie' | 'header' | 'path' | 'query';
 
 export type ParameterStyle =
-    | 'matrix'
-    | 'label'
-    | 'form'
-    | 'simple'
-    | 'spaceDelimited'
-    | 'pipeDelimited'
-    | 'deepObject';
+    'deepObject' | 'form' | 'label' | 'matrix' | 'pipeDelimited' | 'simple' | 'spaceDelimited';
 
 // Fields shared by Parameter and Header objects
 type ParameterBase = Extensions & {
-    description?: string;
-    required?: boolean;
-    deprecated?: boolean;
     allowEmptyValue?: boolean;
-    style?: ParameterStyle;
-    explode?: boolean;
     allowReserved?: boolean;
-    schema?: Ref<SchemaObject>;
+    content?: Record<string, MediaTypeObject>;
+    deprecated?: boolean;
+    description?: string;
     example?: unknown;
     examples?: Record<string, Ref<ExampleObject>>;
-    content?: Record<string, MediaTypeObject>;
+    explode?: boolean;
+    required?: boolean;
+    schema?: Ref<SchemaObject>;
+    style?: ParameterStyle;
 };
 
 export type ParameterObject = ParameterBase & {
-    name: string;
     in: ParameterLocation;
+    name: string;
 };
 
 // A Header is a Parameter without "name" and "in"
@@ -83,24 +77,24 @@ export type HeaderObject = ParameterBase;
 
 // Request Body & Media Types 
 export type RequestBodyObject = Extensions & {
-    description?: string;
     content: Record<string, MediaTypeObject>;
+    description?: string;
     required?: boolean;
 };
 
 export type MediaTypeObject = Extensions & {
-    schema?: Ref<SchemaObject>;
+    encoding?: Record<string, EncodingObject>;
     example?: unknown;
     examples?: Record<string, Ref<ExampleObject>>;
-    encoding?: Record<string, EncodingObject>;
+    schema?: Ref<SchemaObject>;
 };
 
 export type EncodingObject = Extensions & {
+    allowReserved?: boolean;
     contentType?: string;
+    explode?: boolean;
     headers?: Record<string, Ref<HeaderObject>>;
     style?: ParameterStyle;
-    explode?: boolean;
-    allowReserved?: boolean;
 };
 
 // Responses 
@@ -110,8 +104,8 @@ export type ResponsesObject = Extensions & {
 };
 
 export type ResponseObject = Extensions & {
+    content?: Record<string, MediaTypeObject>;
     description: string;
     headers?: Record<string, Ref<HeaderObject>>;
-    content?: Record<string, MediaTypeObject>;
     links?: Record<string, Ref<LinkObject>>;
 };

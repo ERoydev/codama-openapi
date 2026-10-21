@@ -15,7 +15,7 @@ export type ReferenceObject = {
     $ref: string;
 };
 
-export type Ref<T> = T | ReferenceObject;
+export type Ref<T> = ReferenceObject | T;
 
 export const isReference = (value: unknown): value is ReferenceObject =>
     typeof value === 'object' && value !== null && '$ref' in value;
@@ -23,15 +23,15 @@ export const isReference = (value: unknown): value is ReferenceObject =>
 
 // Components 
 export type ComponentsObject = Extensions & {
-    schemas?: Record<string, Ref<SchemaObject>>;
-    responses?: Record<string, Ref<ResponseObject>>;
-    parameters?: Record<string, Ref<ParameterObject>>;
-    examples?: Record<string, Ref<ExampleObject>>;
-    requestBodies?: Record<string, Ref<RequestBodyObject>>;
-    headers?: Record<string, Ref<HeaderObject>>;
-    securitySchemes?: Record<string, Ref<SecuritySchemeObject>>;
-    links?: Record<string, Ref<LinkObject>>;
     callbacks?: Record<string, Ref<CallbackObject>>;
+    examples?: Record<string, Ref<ExampleObject>>;
+    headers?: Record<string, Ref<HeaderObject>>;
+    links?: Record<string, Ref<LinkObject>>;
+    parameters?: Record<string, Ref<ParameterObject>>;
+    requestBodies?: Record<string, Ref<RequestBodyObject>>;
+    responses?: Record<string, Ref<ResponseObject>>;
+    schemas?: Record<string, Ref<SchemaObject>>;
+    securitySchemes?: Record<string, Ref<SecuritySchemeObject>>;
 };
 
 // Callbacks
@@ -40,47 +40,47 @@ export type CallbackObject = Extensions & {
 };
 
 export type ExampleObject = Extensions & {
-    summary?: string;
     description?: string;
-    value?: unknown;
     externalValue?: string;
+    summary?: string;
+    value?: unknown;
 };
 
 export type LinkObject = Extensions & {
-    operationRef?: string;
+    description?: string;
     operationId?: string;
+    operationRef?: string;
     parameters?: Record<string, unknown>;
     requestBody?: unknown;
-    description?: string;
     server?: ServerObject;
 };
 
 // Based on the OpenAPI v3.0.3 specification:
 // https://spec.openapis.org/oas/v3.0.3.html#openapi-object
 export type OpenAPIObject = Extensions & {
-    openapi: string;
-    info: InfoObject;
-    servers?: ServerObject[];
-    paths: PathsObject;
     components?: ComponentsObject;
-    security?: SecurityRequirementObject[];
-    tags?: TagObject[];
     externalDocs?: ExternalDocumentationObject;
+    info: InfoObject;
+    openapi: string;
+    paths: PathsObject;
+    security?: SecurityRequirementObject[];
+    servers?: ServerObject[];
+    tags?: TagObject[];
 };
 
 export type InfoObject = Extensions & {
-    title: string;
-    description?: string;
-    termsOfService?: string;
     contact?: ContactObject;
+    description?: string;
     license?: LicenseObject;
+    termsOfService?: string;
+    title: string;
     version: string;
 };
 
 export type ContactObject = Extensions & {
+    email?: string;
     name?: string;
     url?: string;
-    email?: string;
 };
 
 export type LicenseObject = Extensions & {
@@ -89,19 +89,19 @@ export type LicenseObject = Extensions & {
 };
 
 export type ServerObject = Extensions & {
-    url: string;
     description?: string;
+    url: string;
     variables?: Record<string, ServerVariableObject>;
 };
 
 export type ServerVariableObject = Extensions & {
-    enum?: string[];
     default: string;
     description?: string;
+    enum?: string[];
 };
 
 export type TagObject = Extensions & {
-    name: string;
     description?: string;
     externalDocs?: ExternalDocumentationObject;
+    name: string;
 };
