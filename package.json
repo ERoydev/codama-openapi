@@ -28,7 +28,7 @@
         "dev": "vitest",
         "lint": "eslint . && prettier --check .",
         "lint:fix": "eslint --fix . && prettier --write .",
-        "test": "pnpm test:types && pnpm test:treeshakability && pnpm test:unit && pnpm test:exports",
+        "test": "pnpm test:types && pnpm test:treeshakability && pnpm test:unit && pnpm test:exports && pnpm test:e2e",
         "test:e2e": "bash test/e2e/test.sh",
         "test:exports": "node ./test/exports/module.mjs && node ./test/exports/commonjs.cjs",
         "test:treeshakability": "agadoo dist/index.mjs",
