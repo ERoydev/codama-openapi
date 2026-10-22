@@ -71,23 +71,10 @@ jobs:
           git status
           test -z "$(git status --porcelain)"
 
-  release:
-    name: Release
-    needs: [lint, tests]
-    if: github.event_name == 'push'
-    permissions:
-      contents: write
-      pull-requests: write
-      id-token: write
-    uses: codama-idl/release-tools/.github/workflows/release.yml@v1
-    with:
-      release-version: 1.x
-    secrets: inherit
-
   dependabot:
     name: Dependabot
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'codama-idl/renderers-demo'
+    if: github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'decaplabs/codama-openapi'
     needs: [lint, tests]
     permissions:
       contents: write
