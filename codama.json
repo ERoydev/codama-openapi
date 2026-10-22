@@ -1,0 +1,10 @@
+{
+    "idl": "example_idl.json",
+    "before": [],
+    "scripts": {
+        "demo": {
+            "from": "./dist/index.node.mjs",
+            "args": ["generated/docs"]
+        }
+    }
+}

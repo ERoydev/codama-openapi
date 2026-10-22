@@ -3,7 +3,7 @@
     "before": [],
     "scripts": {
         "demo": {
-            "from": "@codama/renderers-demo",
+            "from": "codama-renderer-openapi",
             "args": ["docs"]
         }
     }
