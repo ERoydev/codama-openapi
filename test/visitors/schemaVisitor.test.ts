@@ -16,6 +16,7 @@ import {
     REGISTERED_TYPE_NODE_KINDS,
     remainderCountNode,
     sizePrefixTypeNode,
+    solAmountTypeNode,
     stringTypeNode,
     structFieldTypeNode,
     structTypeNode,
@@ -46,6 +47,7 @@ const HANDLED_KINDS = new Set([
     'optionTypeNode',
     'publicKeyTypeNode',
     'sizePrefixTypeNode',
+    'solAmountTypeNode',
     'stringTypeNode',
     'structTypeNode',
     'tupleTypeNode',
@@ -94,6 +96,14 @@ test('it maps a string type', () => {
 test('it maps a public key type', () => {
     expect(visit(publicKeyTypeNode(), getSchemaVisitor())).toEqual({
         description: 'base58 public key',
+        type: 'string',
+    });
+});
+
+test('it maps a sol amount type to its wrapped number schema, annotated as lamports', () => {
+    expect(visit(solAmountTypeNode(numberTypeNode('u64')), getSchemaVisitor())).toEqual({
+        description: 'amount in lamports',
+        pattern: UNSIGNED_BIG_INT_PATTERN,
         type: 'string',
     });
 });

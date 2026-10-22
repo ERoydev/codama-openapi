@@ -1,0 +1,14 @@
+{
+    "name": "codama-renderer-openapi-e2e-system",
+    "private": true,
+    "version": "0.0.0",
+    "type": "commonjs",
+    "sideEffects": false,
+    "license": "MIT",
+    "scripts": {
+        "test": "../../../node_modules/.bin/codama run openapi && ../../../node_modules/.bin/redocly lint out/openapi.yaml --config ../../../redocly.yaml"
+    },
+    "devDependencies": {
+        "codama-renderer-openapi": "file:../../.."
+    }
+}
