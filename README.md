@@ -83,11 +83,3 @@ src/
 ├── renderVisitor/       # Codama entry point, writes the files
 └── types/               # OpenAPI 3.0.3 types
 ```
-
-## Roadmap
-
-- [x] Accounts → `GET` paths and schemas
-- [x] Instructions → `POST` paths and request schemas
-- [ ] Program errors → `ProgramError` schema
-- [ ] Defined types → shared schemas
-- [ ] Transaction response schema (`signature`)
