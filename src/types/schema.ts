@@ -4,6 +4,9 @@ import { ExternalDocumentationObject } from './paths';
 // Schema
 export type SchemaType = 'array' | 'boolean' | 'integer' | 'number' | 'object' | 'string';
 
+// Schema name -> definition, e.g. components.schemas before $ref-wrapping
+export type SchemaMap = Record<string, SchemaObject>;
+
 export type SchemaObject = Extensions & {
     additionalProperties?: Ref<SchemaObject> | boolean;
     // Composition

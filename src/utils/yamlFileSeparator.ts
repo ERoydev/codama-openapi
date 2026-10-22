@@ -1,6 +1,6 @@
 import { posix } from 'node:path';
 
-export function YamlFileSeparator<T extends Record<string, unknown>>(
+export function yamlFileSeparator<T extends Record<string, unknown>>(
     yamlFragment: T,
     prefix: string,
 ): { files: Record<string, unknown>; refs: Record<keyof T, { $ref: string }> } {

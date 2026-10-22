@@ -1,5 +1,4 @@
 // Specification Extensions
-
 import {
     ExternalDocumentationObject,
     HeaderObject,

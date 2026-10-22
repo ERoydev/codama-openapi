@@ -3,7 +3,7 @@ import { RootNode } from '@codama/nodes';
 import { OPENAPI_VERSION } from './constants';
 import { getAccountFragment, getDefinedTypeFragment, getInstructionFragment } from './fragments';
 import { OpenAPIObject } from './types';
-import { RenderOptions, YamlFileSeparator } from './utils';
+import { RenderOptions, yamlFileSeparator } from './utils';
 
 export function buildOpenApi(root: RootNode, options: RenderOptions = {}) {
     const program = root.program;
@@ -13,10 +13,10 @@ export function buildOpenApi(root: RootNode, options: RenderOptions = {}) {
     const definedTypes = getDefinedTypeFragment(program.definedTypes);
 
     const allPaths = { ...accounts.paths, ...instructions.paths };
-    const allSchemas = { ...definedTypes, ...accounts.schemas, ...instructions.schemas };
+    const allSchemas = { ...definedTypes.schemas, ...accounts.schemas, ...instructions.schemas };
 
-    const { refs: paths, files: pathFiles } = YamlFileSeparator(allPaths, 'paths');
-    const { refs: schemas, files: schemaFiles } = YamlFileSeparator(allSchemas, 'schemas');
+    const { refs: paths, files: pathFiles } = yamlFileSeparator(allPaths, 'paths');
+    const { refs: schemas, files: schemaFiles } = yamlFileSeparator(allSchemas, 'schemas');
 
     const spec: OpenAPIObject = {
         openapi: OPENAPI_VERSION,

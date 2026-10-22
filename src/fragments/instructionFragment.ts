@@ -1,27 +1,25 @@
 import type { InstructionAccountNode, InstructionNode } from '@codama/nodes';
 import { visit } from '@codama/visitors-core';
 
-import { RESOLVED_BY_BACKEND } from '../constants';
-import type { PathsObject, SchemaObject } from '../types';
+import { KNOWN_ADDRESSES } from '../constants';
+import type { PathsObject, SchemaMap, SchemaObject } from '../types';
 import { pascal } from '../utils';
 import { getSchemaVisitor } from '../visitors';
 
 export type InstructionFragment = {
     paths: PathsObject;
-    schemas: Record<string, SchemaObject>;
+    schemas: SchemaMap;
 };
 
-// returns false if the account has one of the default values, so the account is going to be left out out of the request
-
-export const isFromRequest = (acc: InstructionAccountNode): boolean => {
-    // No default value, backend can't know it, caller needs to send it
+// True when we have no way to derive the account's address, so the caller must supply it
+export const isUnknownAccount = (acc: InstructionAccountNode): boolean => {
     if (!acc.defaultValue) return true;
 
-    if (RESOLVED_BY_BACKEND.includes(acc.defaultValue.kind)) return false;
+    if (KNOWN_ADDRESSES.includes(acc.defaultValue.kind)) return false;
 
     throw new Error(
         `Account "${acc.name}" has unhandled default value "${acc.defaultValue.kind}". ` +
-            `Add it to RESOLVED_BY_BACKEND or handle it explicitly.`,
+            `Add it to KNOWN_ADDRESSES or handle it explicitly.`,
     );
 };
 
@@ -43,7 +41,6 @@ export function getInstructionFragment(
         const required: string[] = [];
 
         // discriminator is the first arg for each ix
-        // TODO test with IDLs that has ugly arguments
         for (const arg of ix.arguments ?? []) {
             if (arg.defaultValueStrategy === 'omitted') continue;
             properties[arg.name] = visit(arg.type, visitor);
@@ -51,19 +48,17 @@ export function getInstructionFragment(
         }
 
         // Accounts the caller has to send
-        for (const acc of (ix.accounts ?? []).filter(isFromRequest)) {
+        for (const acc of (ix.accounts ?? []).filter(isUnknownAccount)) {
             properties[acc.name] = { description: 'base58 account address', type: 'string' };
             if (!acc.isOptional) required.push(acc.name);
         }
 
-        // Schema
         fragment.schemas[requestName] = {
             type: 'object',
             properties,
             ...(required.length ? { required } : {}),
         };
 
-        // Path
         fragment.paths[`/${programName}/${ix.name}`] = {
             post: {
                 operationId: ix.name,

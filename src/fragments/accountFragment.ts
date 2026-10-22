@@ -1,13 +1,13 @@
 import type { AccountNode } from '@codama/nodes';
 import { visit } from '@codama/visitors-core';
 
-import type { PathsObject, SchemaObject } from '../types';
+import type { PathsObject, SchemaMap } from '../types';
 import { pascal } from '../utils';
 import { getSchemaVisitor } from '../visitors';
 
 export type AccountFragment = {
     paths: PathsObject;
-    schemas: Record<string, SchemaObject>;
+    schemas: SchemaMap;
 };
 
 /**
@@ -22,10 +22,8 @@ export function getAccountFragment(programName: string, accounts: readonly Accou
     for (const account of [...accounts].sort((a, b) => a.name.localeCompare(b.name))) {
         const name = pascal(account.name);
 
-        // Schema
         fragment.schemas[name] = visit(account.data, visitor);
 
-        // Path
         fragment.paths[`/${programName}/${account.name}/{address}`] = {
             get: {
                 operationId: `get${name}`,
