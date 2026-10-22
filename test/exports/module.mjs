@@ -3,7 +3,7 @@ globalThis.__dirname = 'DO_NOT_USE';
 
 import assert from 'node:assert';
 
-import { renderVisitor } from '../../dist/index.node.mjs';
+import { renderVisitor } from '../../dist/index.mjs';
 
 const visitor = renderVisitor('out/openapi.yaml');
 assert.strictEqual(typeof visitor.visitRoot, 'function');
