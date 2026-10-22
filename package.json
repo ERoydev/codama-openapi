@@ -1,7 +1,7 @@
 {
     "name": "codama-renderer-openapi",
     "version": "1.0.7",
-    "description": "Demo renderer to help creating new ones",
+    "description": "Codama renderer that generates an OpenAPI 3.0.3 spec from a Solana program IDL",
     "exports": {
         "types": "./dist/types/index.d.ts",
         "import": "./dist/index.mjs",
