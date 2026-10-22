@@ -12,8 +12,7 @@ export type InstructionFragment = {
 };
 
 // returns false if the account has one of the default values, so the account is going to be left out out of the request
-// const isFromRequest = (acc: InstructionAccountNode) =>
-// !(acc.defaultValue && RESOLVED_BY_BACKEND.includes(acc.defaultValue.kind));
+
 export const isFromRequest = (acc: InstructionAccountNode): boolean => {
     // No default value, backend can't know it, caller needs to send it
     if (!acc.defaultValue) return true;
