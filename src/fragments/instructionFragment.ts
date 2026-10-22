@@ -59,8 +59,8 @@ export function getInstructionFragment(
 
         // Schema
         fragment.schemas[requestName] = {
-            properties,
             type: 'object',
+            properties,
             ...(required.length ? { required } : {}),
         };
 

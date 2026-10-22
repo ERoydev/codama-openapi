@@ -34,17 +34,17 @@ export function getAccountFragment(programName: string, accounts: readonly Accou
                 tags: [programName],
                 parameters: [
                     {
-                        description: 'base58 account address',
-                        in: 'path',
                         name: 'address',
+                        in: 'path',
+                        description: 'base58 account address',
                         required: true,
                         schema: { type: 'string' },
                     },
                 ],
                 responses: {
                     '200': {
-                        content: { 'application/json': { schema: { $ref: `#/components/schemas/${name}` } } },
                         description: 'Decoded account data',
+                        content: { 'application/json': { schema: { $ref: `#/components/schemas/${name}` } } },
                     },
                     '404': { description: 'Account not found' },
                 },

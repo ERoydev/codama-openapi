@@ -23,8 +23,11 @@ export function buildOpenApi(root: RootNode, options: RenderOptions = {}) {
         info: {
             title: program.name,
             version: program.version ?? '0.0.0',
+            description: `REST API for the ${program.name} Solana program (${program.publicKey}).`,
+            'x-program-id': program.publicKey,
         },
         ...(options.serverUrl ? { servers: [{ url: options.serverUrl }] } : {}),
+        tags: [{ name: program.name, description: `Instructions and accounts of ${program.name}` }],
         paths,
         components: { schemas },
     };
