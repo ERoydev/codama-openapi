@@ -1,7 +1,6 @@
-const { definedTypeNode, numberTypeNode } = require('@codama/nodes');
-const { visit } = require('@codama/visitors-core');
+const assert = require('node:assert');
 
-const { getRenderMapVisitor } = require('../../dist/index.node.cjs');
+const { renderVisitor } = require('../../dist/index.cjs');
 
-const node = definedTypeNode({ name: 'answerToLife', type: numberTypeNode('u8') });
-visit(node, getRenderMapVisitor());
+const visitor = renderVisitor('out/openapi.yaml');
+assert.strictEqual(typeof visitor.visitRoot, 'function');

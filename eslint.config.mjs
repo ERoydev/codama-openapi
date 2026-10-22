@@ -1,4 +1,4 @@
-import solanaConfig from '@solana/eslint-config-solana';
+import solanaConfig from '@solana-config/eslint';
 import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
