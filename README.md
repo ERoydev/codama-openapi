@@ -61,9 +61,13 @@ npx codama run openapi
 
 ### Options
 
-| Option      | Type     | Description                        |
-| ----------- | -------- | ---------------------------------- |
-| `serverUrl` | `string` | Adds a `servers` entry to the spec |
+| Option        | Type     | Description                                    | Default                                        |
+| ------------- | -------- | ---------------------------------------------- | ---------------------------------------------- |
+| `title`       | `string` | Overrides `info.title`                         | the program name                               |
+| `version`     | `string` | Overrides `info.version`                       | the program version, or `0.0.0`                |
+| `description` | `string` | Overrides `info.description`                   | generated from the program name and public key |
+| `serverUrl`   | `string` | Adds a `servers` entry to the spec             | omitted                                        |
+| `basePath`    | `string` | Prefixes every generated path (e.g. `/api/v1`) | no prefix                                      |
 
 ## Development
 
