@@ -80,5 +80,9 @@ export function getSchemaVisitor() {
                 type: 'array',
             };
         },
+
+        visitSolAmountType(node, { self }) {
+            return { ...visit(node.number, self), description: 'amount in lamports' };
+        },
     });
 }

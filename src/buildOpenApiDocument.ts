@@ -25,7 +25,8 @@ export function buildOpenApi(root: RootNode, options: RenderOptions = {}) {
         info: {
             title: options.title ?? program.name,
             version: options.version ?? program.version ?? '0.0.0',
-            description: options.description ?? `REST API for the ${program.name} Solana program (${program.publicKey}).`,
+            description:
+                options.description ?? `REST API for the ${program.name} Solana program (${program.publicKey}).`,
             'x-program-id': program.publicKey,
         },
         ...(options.serverUrl ? { servers: [{ url: options.serverUrl }] } : {}),
@@ -39,7 +40,5 @@ export function buildOpenApi(root: RootNode, options: RenderOptions = {}) {
 
 function prefixPaths(paths: PathsObject, basePath: string): PathsObject {
     if (!basePath) return paths;
-    return Object.fromEntries(
-        Object.entries(paths).map(([path, item]) => [`${basePath}${path}`, item]),
-    ) as PathsObject;
+    return Object.fromEntries(Object.entries(paths).map(([path, item]) => [`${basePath}${path}`, item])) as PathsObject;
 }
