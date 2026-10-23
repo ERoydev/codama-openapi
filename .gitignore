@@ -2,6 +2,7 @@
 
 # builds
 dist/
+test/e2e/system/out/
 
 # dependencies
 node_modules

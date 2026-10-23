@@ -1,0 +1,10 @@
+{
+    "idl": "idl.json",
+    "before": [],
+    "scripts": {
+        "openapi": {
+            "from": "codama-renderer-openapi",
+            "args": ["out/openapi.yaml", { "serverUrl": "https://api.foo.com" }]
+        }
+    }
+}

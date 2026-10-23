@@ -1,0 +1,42 @@
+{
+    "address": "JBz9ZUxWbMEZB2yVmoQz5rtAzYUApjYj5BQw6a48hHwS",
+    "metadata": {
+        "name": "Pair",
+        "version": "0.1.0",
+        "spec": "0.1.0",
+        "description": "Created with Anchor"
+    },
+    "instructions": [
+        {
+            "name": "set_pair",
+            "discriminator": [1, 2, 3, 4, 5, 6, 7, 8],
+            "accounts": [
+                {
+                    "name": "authority",
+                    "signer": true
+                }
+            ],
+            "args": [
+                { "name": "pair", "type": { "defined": { "name": "Pair" } } },
+                { "name": "same", "type": { "defined": { "name": "SamePair" } } },
+                { "name": "unit", "type": { "defined": { "name": "Unit" } } }
+            ]
+        }
+    ],
+    "accounts": [],
+    "errors": [],
+    "types": [
+        {
+            "name": "Pair",
+            "type": { "kind": "struct", "fields": ["u64", "pubkey"] }
+        },
+        {
+            "name": "SamePair",
+            "type": { "kind": "struct", "fields": ["u8", "u8"] }
+        },
+        {
+            "name": "Unit",
+            "type": { "kind": "struct", "fields": [] }
+        }
+    ]
+}
